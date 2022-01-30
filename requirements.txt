@@ -1,0 +1,8 @@
+Flask
+Flask-HTTPAuth
+Flask-Login
+Flask-SQLAlchemy
+flask-marshmallow
+flask-cors
+webargs
+mistune

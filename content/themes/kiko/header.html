@@ -1,0 +1,19 @@
+<header class="masthead">
+  {% if request.path == '/' %}
+  <h1 class="masthead-title">
+    <a href="{{ url_for('main.index') }}">UP<span>1AND</span></a>
+  </h1>
+  <nav class="masthead-nav">
+    <a href="{{ url_for('main.page', slug='about') }}" class="menu-link">about</a>
+    <a href="{{ url_for('main.archive') }}" class="menu-link">archive</a>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('main.dashboard') }}" class="menu-link">dashboard</a>
+    <a href="{{ url_for('main.logout') }}" class="menu-link">logout</a>
+    {% endif %}
+  </nav>
+  {% else %}
+  <h1 class="masthead-title--small">
+    <a href="{{ url_for('main.index') }}">UP1AND</a>
+  </h1>
+  {% endif %}
+</header>
