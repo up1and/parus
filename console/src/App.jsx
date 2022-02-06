@@ -6,6 +6,7 @@ import LoginPage from './pages/Login'
 import HomePage from './pages/Home'
 import PostsPage from './pages/Posts'
 import SettingsPage from './pages/Settings';
+import NotFoundPage from './pages/NotFound';
 
 import AuthRequired from './components/Auth';
 
@@ -19,6 +20,7 @@ function App() {
             <Route path='login' element={<LoginPage/>} />
             <Route path='posts' element={<AuthRequired><PostsPage/></AuthRequired>} />
             <Route path='settings' element={<AuthRequired><SettingsPage/></AuthRequired>} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>

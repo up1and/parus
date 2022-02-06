@@ -1,10 +1,17 @@
+import React from 'react';
+import { Flex, Box, Heading } from '@chakra-ui/react';
+
+import Sidebar from '../components/Side';
+import { MainSection } from '../components/Layout';
 
 
 function HomePage() {
     return (
-      <main style={{ padding: "1rem 0" }}>
-        <h2>Home</h2>
-      </main>
+      <Flex>
+        <Sidebar />
+        <MainSection title='Home'>
+        </MainSection>
+      </Flex>
     );
   }
 

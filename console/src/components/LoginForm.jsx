@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Stack, Input, Button, FormControl, InputGroup, InputLeftElement, InputRightElement, FormErrorMessage, useToast, chakra } from '@chakra-ui/react';
-import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons'
-import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { Stack, Input, Button, Icon, FormControl, InputGroup, InputLeftElement, InputRightElement, FormErrorMessage } from '@chakra-ui/react';
+
+import { FiUser,FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 import useAuth from '../stores/auth';
 import { useToastMessage } from '../hooks';
-
-
-const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
 
 
 function LoginForm(props) {
@@ -31,7 +28,6 @@ function LoginForm(props) {
       login(res.data);
       navigate(referer, { replace: true });
     }).catch(err => {
-      console.log(err.toString());
       setToastMessage({
         title: 'Error',
         description: err.toString(),
@@ -50,7 +46,7 @@ function LoginForm(props) {
           <InputGroup size='sm'>
             <InputLeftElement
               pointerEvents='none'
-              children={<CFaUserAlt color='gray.300' />}
+              children={<Icon as={FiUser} color='gray.500' />}
             />
             <Input 
               placeholder='Username'
@@ -64,7 +60,7 @@ function LoginForm(props) {
             <InputLeftElement
               pointerEvents='none'
               color='gray.300'
-              children={<CFaLock color='gray.300' />}
+              children={<Icon as={FiLock} color='gray.500' />}
             />
             <Input
               type={showPassword ? 'text' : 'password'}
@@ -73,14 +69,14 @@ function LoginForm(props) {
             />
             <InputRightElement width='2.5rem'>
               <Button size='xs' onClick={handlePasswordVisibility}>
-                {showPassword ? <ViewIcon color='gray.400' /> : <ViewOffIcon color='gray.400' />}
+                {showPassword ? <Icon as={FiEye} color='gray.500' /> : <Icon as={FiEyeOff} color='gray.500' />}
               </Button>
             </InputRightElement>
           </InputGroup>
           {/* {errors.password && <FormErrorMessage>This field is required</FormErrorMessage>} */}
         </FormControl>
         <Button
-          {...(isSubmitting ? { isLoading: true } : {})}
+          isLoading={isSubmitting}
           type='submit'
           variant='solid'
           colorScheme='teal'
@@ -91,6 +87,6 @@ function LoginForm(props) {
       </Stack>
     </form>
   )
-}
+};
 
-export default LoginForm
+export default LoginForm;
