@@ -1,92 +1,78 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { Stack, Input, Button, Icon, FormControl, InputGroup, InputLeftElement, InputRightElement, FormErrorMessage } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
-import { FiUser,FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-
-import useAuth from '../stores/auth';
-import { useToastMessage } from '../hooks';
-
+import useAuth from '../stores/auth'
 
 function LoginForm(props) {
-  const [showPassword, setShowPassword] = useState(false);
-  const handlePasswordVisibility = () => setShowPassword(!showPassword);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm()
+  const login = useAuth((state) => state.login)
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
-  const [toastMessage, setToastMessage] = useToastMessage();
-  const login = useAuth(state => state.login);
+  const navigate = useNavigate()
+  const referer = location.state?.from?.pathname || '/'
 
-  const navigate = useNavigate();
-  const referer = location.state?.from?.pathname || '/';
-
-  const onSubmit = data => {
-    axios.post('/api/auth/login', data).then(res => {
-      login(res.data);
-      navigate(referer, { replace: true });
-    }).catch(err => {
-      setToastMessage({
-        title: 'Error',
-        description: err.toString(),
-        status: 'error',
-      });
-    });
+  const onSubmit = (data) => {
+    axios
+      .post('/api/auth/login', data)
+      .then((res) => {
+        login(res.data)
+        navigate(referer, { replace: true })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack
-        spacing={4}
-        p='1rem'
-      >
-        <FormControl isInvalid={errors.username}>
-          <InputGroup size='sm'>
-            <InputLeftElement
-              pointerEvents='none'
-              children={<Icon as={FiUser} color='gray.500' />}
-            />
-            <Input 
-              placeholder='Username'
-              {...register('username', { required: true })}
-            />
-          </InputGroup>
-        </FormControl>
+      <div>
+        <label
+          for="username"
+          className="block text-sm text-gray-800 dark:text-gray-200"
+        >
+          Username
+        </label>
+        <input
+          type="text"
+          className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          {...register('username', { required: true })}
+        />
+      </div>
 
-        <FormControl isInvalid={errors.password}>
-          <InputGroup size='sm'>
-            <InputLeftElement
-              pointerEvents='none'
-              color='gray.300'
-              children={<Icon as={FiLock} color='gray.500' />}
-            />
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder='Password'
-              {...register('password', { required: true })}
-            />
-            <InputRightElement width='2.5rem'>
-              <Button size='xs' onClick={handlePasswordVisibility}>
-                {showPassword ? <Icon as={FiEye} color='gray.500' /> : <Icon as={FiEyeOff} color='gray.500' />}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          {/* {errors.password && <FormErrorMessage>This field is required</FormErrorMessage>} */}
-        </FormControl>
-        <Button
-          isLoading={isSubmitting}
-          type='submit'
-          variant='solid'
-          colorScheme='teal'
-          size='sm'
+      <div className="mt-4">
+        <div className="flex items-center justify-between">
+          <label
+            for="password"
+            className="block text-sm text-gray-800 dark:text-gray-200"
+          >
+            Password
+          </label>
+        </div>
+
+        <input
+          type="password"
+          className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          {...register('password', { required: true })}
+        />
+      </div>
+
+      <div className="mt-6">
+        <button
+          type="submit"
+          className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+          disabled={isSubmitting}
         >
           Login
-        </Button>
-      </Stack>
+        </button>
+      </div>
     </form>
   )
-};
+}
 
-export default LoginForm;
+export default LoginForm
